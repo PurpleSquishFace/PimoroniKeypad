@@ -23,9 +23,101 @@ There are several steps to get started:
 
 3. Copy the [pimoronikeypad](https://github.com/PurpleSquishFace/PimoroniKeypad/tree/main/pimoronikeypad) folder into the lib folder on your device.
 
-4. Copy the [code.py](https://github.com/PurpleSquishFace/PimoroniKeypad/blob/main/Python/code.py) file into the root folder of your device.
+4. Copy the [code.py](https://github.com/PurpleSquishFace/PimoroniKeypad/blob/main/code.py) file into the root folder of your device.
 
 5. Create a config.json file and add it into the root folder of your device.
+
+# Usage
+
+The code is usable straight out of the box, once a config.json file has been created. However, custom logic can be achieved by interfacing with the library.
+
+## config.json
+---
+
+The config.json file drives the customisations and behaviour of the device. The top level properties of the json object set the board itself, example below:
+
+```json
+{
+    "brightness": 0.25,
+    "colour": {             
+      "red": 150,
+      "green": 150,
+      "blue": 150
+    },
+    "loadPattern": [ 0, 2, 5, 7, 8, 10, 13, 15, 1, 3, 4, 6, 9, 11, 12, 14 ],
+    "loadPatternDelay": 0.01,
+    "config": [...]
+  }
+```
+
+Property | Data Type | Description
+--- | --- | ---
+brightness | Float | The brightness of the keys on the board (between 0 and 1).
+colour | Object | The colour of the keys on the board, represented as integer RGB values between 0 and 255.
+loadPattern | Int Array or String | The order the keys are illuminated in when the board first loads, as an array of integers the correspond to the index of the keys (left to right, top to bottom, 0 to 15). Can also be a string to use one of the preset patterns:  *"simple"*, *"diagonal"*, *"spiral"*.
+loadPatternDelay  | Float  | The amount of delay between each key illuminating during the load animation, in seconds.
+
+The array of objects in the *config* property represent the keys on the device that have been programmed and their properties, example below:
+
+```json
+{
+    "x": 0,
+    "y": 0,
+    "colour": {
+        "red": 255,
+        "green": 0,
+        "blue": 0
+    },
+    "commands": [...]
+}
+```
+Property | DataType | Description
+--- | --- | ---
+x | Integer  | The x coordinate of the key (0 to 3, starting top left).
+y | Integer | The y coordinate of the key (0 to 3, starting top left).
+colour | Object | The colour of the key, represented as integer RGB values between 0 and 255.
+
+The array of object in the *commands* property represent the commands that each key executes when pressed. Each command object is an array of action objects, which are the individual actions that make up the command. The example below is one command object, made up of multiple actions:
+
+```json
+[
+    {
+        "actionType": "keyboardShortcut",
+        "action": [
+            "windows"
+        ]
+    },
+    {
+        "actionType": "enterText",
+        "action": "chrome"
+    },
+    {
+        "actionType": "keyboardShortcut",
+        "action": [
+            "enter"
+        ]
+    },
+    {
+        "actionType": "enterText",
+        "action": "https://giphy.com/explore/cat"
+    },
+    {
+        "actionType": "keyboardShortcut",
+        "action": [
+            "enter"
+        ]
+    }
+],
+```
+Property | DataType | Description
+--- | --- | ---
+actionType | String | The type of action to be performed, either keyboard key press(es) or text input. Represented as *"keyboardShortcut"* and *"enterText"* respectively.
+action | String or String Array | The action performed, dependent on the action type - for the *keyboardShortcut* action type this is an array of keys that should be pressed together, for the *enterText* action typee this is a string that is typed in.
+
+Put simply, each programmed key is a different mode for the board, where the rest of the keys then perform a different action when pressed. Therefore, with sixteen keys the board can be programmed to peform up to 240 unique commands.
+
+When a programmed key is pressed, each command configured is associated one-by-one to each key on the board, starting top left and moving left to right, top to bottom (skipping over the main programmed key).
+By default keys without an associated command will become the colour set by the board, whereas the keys that do have an associated command will be the colour of the programmed  set in the configuration.
 
 # Credits
 
