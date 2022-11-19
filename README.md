@@ -4,6 +4,10 @@ This repository provides the code to create a powerful little human input device
 
 The device runs using [CircuitPython](https://circuitpython.org/board/raspberry_pi_pico/), and makes use of a number of [adafruit](https://learn.adafruit.com/) libraries to control the microcontroller.
 
+<p align="center">
+<img src="https://user-images.githubusercontent.com/48553563/202858752-d25ebd8f-e695-4c09-8769-c22fd0902bfd.jpg" alt="pimoroniRBGkeypad" width="300"/>
+</p>
+
 # Installation
 
 There are several steps to get started: 
