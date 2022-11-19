@@ -1,4 +1,4 @@
-from PimoroniKeypad import PimoroniKeypad
+from pimoronikeypad import PimoroniKeypad
 
 keypad = PimoroniKeypad()
 
