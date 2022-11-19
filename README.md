@@ -32,11 +32,10 @@ There are several steps to get started:
 The code is usable straight out of the box, once a config.json file has been created. However, custom logic can be achieved by interfacing with the library.
 
 ## config.json
----
 
-The config.json file drives the customisations and behaviour of the device. The top level properties of the json object set the board itself, example below:
+The `config.json` file drives the customisations and behaviour of the device. The top level properties of the json object set the board itself, example below:
 
-```json
+``` json
 {
     "brightness": 0.25,
     "colour": {             
@@ -52,14 +51,14 @@ The config.json file drives the customisations and behaviour of the device. The 
 
 Property | Data Type | Description
 --- | --- | ---
-brightness | Float | The brightness of the keys on the board (between 0 and 1).
-colour | Object | The colour of the keys on the board, represented as integer RGB values between 0 and 255.
-loadPattern | Int Array or String | The order the keys are illuminated in when the board first loads, as an array of integers the correspond to the index of the keys (left to right, top to bottom, 0 to 15). Can also be a string to use one of the preset patterns:  *"simple"*, *"diagonal"*, *"spiral"*.
-loadPatternDelay  | Float  | The amount of delay between each key illuminating during the load animation, in seconds.
+`brightness` | Float | The brightness of the keys on the board (between 0 and 1).
+`colour` | Object | The colour of the keys on the board, represented as integer RGB values between 0 and 255.
+`loadPattern` | Int Array or String | The order the keys are illuminated in when the board first loads, as an array of integers the correspond to the index of the keys (left to right, top to bottom, 0 to 15). Can also be a string to use one of the preset patterns:  *"simple"*, *"diagonal"*, *"spiral"*.
+`loadPatternDelay`  | Float  | The amount of delay between each key illuminating during the load animation, in seconds.
 
-The array of objects in the *config* property represent the keys on the device that have been programmed and their properties, example below:
+The array of objects in the `config` property represent the keys on the device that have been programmed and their properties, example below:
 
-```json
+``` json
 {
     "x": 0,
     "y": 0,
@@ -70,16 +69,17 @@ The array of objects in the *config* property represent the keys on the device t
     },
     "commands": [...]
 }
+
 ```
 Property | DataType | Description
 --- | --- | ---
-x | Integer  | The x coordinate of the key (0 to 3, starting top left).
-y | Integer | The y coordinate of the key (0 to 3, starting top left).
-colour | Object | The colour of the key, represented as integer RGB values between 0 and 255.
+`x` | Integer  | The x coordinate of the key (`0` to `3`, starting top left).
+`y` | Integer | The y coordinate of the key (`0` to `3`, starting top left).
+`colour` | Object | The colour of the key, represented as integer RGB values between `0` and `255`.
 
-The array of object in the *commands* property represent the commands that each key executes when pressed. Each command object is an array of action objects, which are the individual actions that make up the command. The example below is one command object, made up of multiple actions:
+The array of object in the `commands` property represent the commands that each key executes when pressed. Each command object is an array of action objects, which are the individual actions that make up the command. The example below is one command object, made up of multiple actions:
 
-```json
+``` json
 [
     {
         "actionType": "keyboardShortcut",
@@ -109,15 +109,174 @@ The array of object in the *commands* property represent the commands that each 
     }
 ],
 ```
+
 Property | DataType | Description
 --- | --- | ---
-actionType | String | The type of action to be performed, either keyboard key press(es) or text input. Represented as *"keyboardShortcut"* and *"enterText"* respectively.
-action | String or String Array | The action performed, dependent on the action type - for the *keyboardShortcut* action type this is an array of keys that should be pressed together, for the *enterText* action typee this is a string that is typed in.
+`actionType` | String | The type of action to be performed, either keyboard key press(es) or text input. Represented as `keyboardShortcut` and `enterText` respectively.
+`action` | String or String Array | The action performed, dependent on the action type - for the `keyboardShortcut` action type this is an array of keys that should be pressed together, for the `enterText` action typee this is a string that is typed in.
 
 Put simply, each programmed key is a different mode for the board, where the rest of the keys then perform a different action when pressed. Therefore, with sixteen keys the board can be programmed to peform up to 240 unique commands.
 
 When a programmed key is pressed, each command configured is associated one-by-one to each key on the board, starting top left and moving left to right, top to bottom (skipping over the main programmed key).
 By default keys without an associated command will become the colour set by the board, whereas the keys that do have an associated command will be the colour of the programmed  set in the configuration.
+
+## PymoroniKeypad
+
+Basic usage of the class in python.
+
+Import the `PimoroniKeypad` class from `pimoronikeypad` module.
+
+``` python
+from pimoronikeypad import PimoroniKeypad
+```
+
+Create a keypad object.
+
+``` python
+keypad = PimoroniKeypad()
+```
+
+### Display
+
+The RGB class can be used to set the `colour` of the keypad keys.
+
+``` python
+# Don't forget to import the class
+from pimoronikeypad import RGB
+
+# Red
+keypad.colour = RGB(255, 0, 0)
+
+# Green
+keypad.colour = RGB(0, 255, 0)
+
+# Blue
+keypad.colour = RGB(0, 0, 255)
+
+# Yellow
+keypad.colour = RGB(255, 255, 0)
+
+# Purple
+keypad.colour = RGB(128, 0, 128)
+
+# White
+keypad.colour = RGB(255, 255, 255)
+
+# Black
+keypad.colour = RGB(0, 0, 0)
+```
+
+The RGB class has a property and method that can be used.
+
+``` python
+colour = RGB(128, 0, 128)
+
+# Passing a tuple of (red, green, blue) updates the colour
+colour.value = (255, 128, 0)
+
+# Displays (255, 128, 0)
+print(colour.value)
+
+# Prints:
+# R: 255
+# G: 128
+# B: 0
+colour.show()
+```
+
+The `brightness` property can be updated used to update the brightness of the keypad - it can be a value between `0` and `1`, where `1` is 100% brightness and `0` is 0% brightness. The default brightness is set at 25% as a value of `0.25`.
+
+``` python
+# Set brightness at 50%
+keypad.brightness = 0.5
+```
+
+The following method resets the board back to the values set in the `config.json` file.
+
+``` python
+keypad.reset()
+```
+
+Any updates to the keypad that don't automatically trigger a refresh can be manually updated using this method.
+
+``` python
+keypad.update()
+```
+
+All the keys can be iterated through using the `keys` property.
+
+``` python
+# Print the coordinates of each key
+for key in keypad.keys:
+    print(key.coordinates)
+```
+
+A single key can be referenced by using the x, y coordinates.
+
+``` python
+# Get the key in position x = 2, y = 1
+key = keypad.get_key(2, 1)
+```
+
+An individual key can have it's `colour` and `brightness` properties set.
+
+``` python
+# Set colour to red
+key.colour = RGB(255, 0, 0)
+
+# Set brightness to 100%
+key.brightness = 1
+
+# Update the keypad
+keypad.update()
+```
+
+**Note**, when setting a key's properties, the keypads `update()` needs to be called to trigger the update on the keypad.
+
+### Reading presses
+
+Each key has two properties to provide functionality to read key presses.
+
+``` python
+key = keypad.get_key(0, 0)
+
+# Returns whether the key is pressed as a boolean
+pressed = key.is_pressed
+
+# Returns whether the key has remained pressed since the last check as a boolean
+still_pressed = key.still_pressed
+```
+
+Using the following method performs the key status check on each key on the keypad.
+
+``` python
+keypad.load_pressed_keys()
+```
+
+This can be used to check in conjunction with a single key object to key for a press.
+
+``` python
+key = keypad.get_key(0, 0)
+
+# If the hasn't been pressed, then pressed is false
+pressed = key.is_pressed
+
+# Press down the key, the call the method
+keypad.load_pressed_keys()
+
+# The is_pressed property will now be true
+pressed = key.is_pressed
+```
+
+The `load_pressed_keys()` method returns the keypad's `keys` property, and can be used with a loop to check all keys. Using a continuous loop with this and the keypad can be constantly checked for a pressed key.
+
+``` python
+while True:        
+    for key in keypad.load_pressed_keys():
+        if key.is_pressed:
+            print('key', key.coordinates, 'is pressed')
+```
+
 
 # Credits
 

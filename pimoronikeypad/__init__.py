@@ -1,1 +1,1 @@
-from .PimoroniKeypad import PimoroniKeypad
+from .PimoroniKeypad import PimoroniKeypad, KeypadKey, KeypadCommand, KeypadAction, RGB

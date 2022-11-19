@@ -216,7 +216,7 @@ class PimoroniKeypad:
 
     @property
     def default_colour(self):
-        """ The default colour of the keppad, regardless of what the current brightness is set """
+        """ The default colour of the keypad, regardless of what the current brightness is set """
         return self._default_colour
     
     @default_colour.setter
@@ -422,7 +422,7 @@ class PimoroniKeypad:
             elif command_action.action_type == 'enterText':
                self.enter_text(command_action.action)
 
-    def clear(self):
+    def reset(self):
         """ Resets the board, including keys, to default values """
         self._colour = self.default_colour
         self._brightness = self.default_brightness
@@ -479,7 +479,7 @@ class PimoroniKeypad:
         for key_index in pattern:
             self.keys[key_index].fade_to_colour(colour)
             time.sleep(load_delay)
-        self.clear()
+        self.reset()
 
 
 """
@@ -723,7 +723,7 @@ class KeypadKey():
         """ The index of the key between 0-15, derived from the key's coordinates """
         return self.x * 4 + self.y
      
-    def clear(self):
+    def reset(self):
         """ Reset the key back to it's default values and updates the keypad """
         self.colour = self.keypad.default_colour
         self.brightness = self.keypad.default_brightness
