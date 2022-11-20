@@ -25,7 +25,7 @@ There are several steps to get started:
 
 4. Copy the [code.py](https://github.com/PurpleSquishFace/PimoroniKeypad/blob/main/code.py) file into the root folder of your device.
 
-5. Create a config.json file and add it into the root folder of your device.
+5. Create a config.json file (or copy the sample found in this repository) and add it into the root folder of your device.
 
 # Usage
 

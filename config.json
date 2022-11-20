@@ -1,0 +1,173 @@
+{
+    "brightness": 0.25,
+    "colour": {
+        "red": 150,
+        "green": 150,
+        "blue": 150
+    },
+    "loadPattern": [
+        0,
+        2,
+        5,
+        7,
+        8,
+        10,
+        13,
+        15,
+        1,
+        3,
+        4,
+        6,
+        9,
+        11,
+        12,
+        14
+    ],
+    "loadPatternDelay": 0.01,
+    "config": [
+        {
+            "x": 0,
+            "y": 0,
+            "colour": {
+                "red": 255,
+                "green": 0,
+                "blue": 0
+            },
+            "commands": [
+                [
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "windows"
+                        ]
+                    },
+                    {
+                        "actionType": "enterText",
+                        "action": "chrome"
+                    },
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "enter"
+                        ]
+                    },
+                    {
+                        "actionType": "enterText",
+                        "action": "https://giphy.com/explore/cat"
+                    },
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "enter"
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "windows"
+                        ]
+                    },
+                    {
+                        "actionType": "enterText",
+                        "action": "notepad"
+                    },
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "enter"
+                        ]
+                    },
+                    {
+                        "actionType": "enterText",
+                        "action": "Hello World!"
+                    }
+                ],
+                [
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "control",
+                            "shift",
+                            "escape"
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "colour": {
+                "red": 0,
+                "green": 255,
+                "blue": 0
+            },
+            "commands": [
+                [
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "alt",
+                            "f4"
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "colour": {
+                "red": 255,
+                "green": 0,
+                "blue": 255
+            },
+            "commands": [
+                [
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "space"
+                        ]
+                    },
+                    {
+                        "actionType": "enterText",
+                        "action": "pa$$w0rd"
+                    }
+                ],
+                [
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "windows",
+                            "l"
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "windows",
+                            "x"
+                        ]
+                    },
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "u"
+                        ]
+                    },
+                    {
+                        "actionType": "keyboardShortcut",
+                        "action": [
+                            "u"
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}
