@@ -33,7 +33,7 @@ The code is usable straight out of the box, once a config.json file has been cre
 
 ## config.json
 
-The `config.json` file drives the customisations and behaviour of the device. The top level properties of the json object set the board itself, example below:
+The `config.json` file drives the customisations and behaviour of the device. The top level properties of the json object set the keypad itself, example below:
 
 ``` json
 {
@@ -51,9 +51,9 @@ The `config.json` file drives the customisations and behaviour of the device. Th
 
 Property | Data Type | Description
 --- | --- | ---
-`brightness` | Float | The brightness of the keys on the board (between 0 and 1).
-`colour` | Object | The colour of the keys on the board, represented as integer RGB values between 0 and 255.
-`loadPattern` | Int Array or String | The order the keys are illuminated in when the board first loads, as an array of integers the correspond to the index of the keys (left to right, top to bottom, 0 to 15). Can also be a string to use one of the preset patterns:  *"simple"*, *"diagonal"*, *"spiral"*.
+`brightness` | Float | The brightness of the keys on the keypad (between 0 and 1).
+`colour` | Object | The colour of the keys on the keypad, represented as integer RGB values between 0 and 255.
+`loadPattern` | Int Array or String | The order the keys are illuminated in when the keypad first loads, as an array of integers the correspond to the index of the keys (left to right, top to bottom, 0 to 15). Can also be a string to use one of the preset patterns:  *"simple"*, *"diagonal"*, *"spiral"*.
 `loadPatternDelay`  | Float  | The amount of delay between each key illuminating during the load animation, in seconds.
 
 The array of objects in the `config` property represent the keys on the device that have been programmed and their properties, example below:
@@ -113,12 +113,12 @@ The array of object in the `commands` property represent the commands that each 
 Property | DataType | Description
 --- | --- | ---
 `actionType` | String | The type of action to be performed, either keyboard key press(es) or text input. Represented as `keyboardShortcut` and `enterText` respectively.
-`action` | String or String Array | The action performed, dependent on the action type - for the `keyboardShortcut` action type this is an array of keys that should be pressed together, for the `enterText` action typee this is a string that is typed in.
+`action` | String or String Array | The action performed, dependent on the action type - for the `keyboardShortcut` action type this is an array of keys that should be pressed together, for the `enterText` action type this is a string that is typed in.
 
-Put simply, each programmed key is a different mode for the board, where the rest of the keys then perform a different action when pressed. Therefore, with sixteen keys the board can be programmed to peform up to 240 unique commands.
+Put simply, each programmed key is a different mode for the keypad, where the rest of the keys then perform a different action when pressed. Therefore, with sixteen keys the keypad can be programmed to peform up to 240 unique commands.
 
-When a programmed key is pressed, each command configured is associated one-by-one to each key on the board, starting top left and moving left to right, top to bottom (skipping over the main programmed key).
-By default keys without an associated command will become the colour set by the board, whereas the keys that do have an associated command will be the colour of the programmed  set in the configuration.
+When a programmed key is pressed, each command configured is associated one-by-one to each key on the keypad, starting top left and moving left to right, top to bottom (skipping over the main programmed key).
+By default keys without an associated command will become the colour set by the keypad, whereas the keys that do have an associated command will be the colour of the programmed set in the configuration.
 
 ## PymoroniKeypad
 
@@ -184,20 +184,20 @@ print(colour.value)
 colour.show()
 ```
 
-The `brightness` property can be updated used to update the brightness of the keypad - it can be a value between `0` and `1`, where `1` is 100% brightness and `0` is 0% brightness. The default brightness is set at 25% as a value of `0.25`.
+The `brightness` property can be updated used to set the brightness of the keypad - it can be a value between `0` and `1`, where `1` is 100% brightness and `0` is 0% brightness. The default brightness is set at 25% as a value of `0.25`.
 
 ``` python
 # Set brightness at 50%
 keypad.brightness = 0.5
 ```
 
-The following method resets the board back to the values set in the `config.json` file.
+The following method resets the keypad back to the values set in the `config.json` file.
 
 ``` python
 keypad.reset()
 ```
 
-To ignore to the configured values, and clear the board entirely, use the following method. It will set the `colour` of each key to black and the `brightness` to 0%. 
+To ignore the configured values, and clear the keypad entirely, use the following method. It will set the `colour` of each key to black and the `brightness` to 0%. 
 
 ``` python
 keypad.clear()
@@ -237,11 +237,11 @@ key.brightness = 1
 keypad.update()
 ```
 
-**Note**, when setting a key's properties, the keypads `update()` needs to be called to trigger the update on the keypad.
+**Note**, when setting a key's properties, the keypad's `update()` method needs to be called to trigger the update on the keypad.
 
 ### Reading presses
 
-Each key has two properties to provide functionality to read key presses.
+Each key has two properties to provide functionality for reading key presses.
 
 ``` python
 key = keypad.get_key(0, 0)
@@ -253,13 +253,13 @@ pressed = key.is_pressed
 still_pressed = key.still_pressed
 ```
 
-Using the following method performs the key status check on each key on the keypad.
+The following method performs the key status check on each key on the keypad.
 
 ``` python
 keypad.load_pressed_keys()
 ```
 
-This can be used to check in conjunction with a single key object to key for a press.
+This can be used to check, in conjunction with a single key object, a key for a press.
 
 ``` python
 key = keypad.get_key(0, 0)
@@ -267,14 +267,14 @@ key = keypad.get_key(0, 0)
 # If the key hasn't been pressed, then pressed is false
 pressed = key.is_pressed
 
-# Press down the key, the call the method
+# Press down the key, then call the method
 keypad.load_pressed_keys()
 
 # The is_pressed property will now be true
 pressed = key.is_pressed
 ```
 
-The `load_pressed_keys()` method returns the keypad's `keys` property, and can be used with a loop to check all keys. Using a continuous loop with this and the keypad can be constantly checked for a pressed key.
+The `load_pressed_keys()` method returns the keypad's `keys` property, and can be used with a loop to check all keys. Using a continuous loop with this, the keypad can be constantly checked for a pressed key.
 
 ``` python
 while True:        
@@ -317,7 +317,7 @@ key = keypad.get_key(0, 1)
 keypad.run_command(key)
 ```
 
-Combining the methods and properties, the following example (from in `code.py`) can be used to listen to key presses, toggle between modes, and execute commands.
+Combining the above methods and properties, the following example (from `code.py`) can be used to listen to key presses, toggle between modes, and execute commands.
 
 ``` python
 from pimoronikeypad import PimoroniKeypad, RGB
@@ -328,9 +328,9 @@ while True:
         
     for key in keypad.load_pressed_keys():
 
-        # Checking for a pressed key, still_pressed property checks
-        # that the key isn't still pressed from the last iteration, 
-        # preventing multiple calls per single key press             
+        # The still_pressed property checks that the key isn't
+        # still pressed from the last iteration, preventing multiple
+        # calls per single key press             
         if key.is_pressed and not key.still_pressed:
             
             if keypad.is_toggled_on and not key.is_toggled_on:
@@ -343,7 +343,7 @@ while True:
                 keypad.toggle_on(key, brightness=1.0)
 ```
 
-Commands can be programmatically created and executed without being specifically linked to a key by the configuration set up.  The keypad methods that execute the commands can be called directly.
+Commands can be programmatically created and executed without being specifically linked to a key by the configuration set up. The keypad methods that execute the commands can be called directly.
 
 The following takes a given string and types it as if it were typed in using the keyboard.
 
@@ -353,7 +353,7 @@ keypad = PimoroniKeypad()
 keypad.enter_text('Hello world!')
 ```
 
-The following can take upto three keyboard keys, and enter them as if they were pressed at the same time on the keyboard.
+The following method can take up to three keyboard keys, and enter them as if they were pressed at the same time on the keyboard.
 
 ``` python
 # The keycode class by adafruit will need to be imported
