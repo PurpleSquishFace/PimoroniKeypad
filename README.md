@@ -197,6 +197,12 @@ The following method resets the board back to the values set in the `config.json
 keypad.reset()
 ```
 
+To ignore to the configured values, and clear the board entirely, use the following method. It will set the `colour` of each key to black and the `brightness` to 0%. 
+
+``` python
+keypad.clear()
+```
+
 Any updates to the keypad that don't automatically trigger a refresh can be manually updated using this method.
 
 ``` python
@@ -258,7 +264,7 @@ This can be used to check in conjunction with a single key object to key for a p
 ``` python
 key = keypad.get_key(0, 0)
 
-# If the hasn't been pressed, then pressed is false
+# If the key hasn't been pressed, then pressed is false
 pressed = key.is_pressed
 
 # Press down the key, the call the method
@@ -277,6 +283,93 @@ while True:
             print('key', key.coordinates, 'is pressed')
 ```
 
+### Executing commands
+
+The following property of a key determines if the key has been programmed.
+
+``` python
+key = keypad.get_key(0, 0)
+
+if key.is_programmed:
+    print('Key has been programmed')
+```
+
+Knowing this means the following method can be called. This will put the keypad and key into a `toggled_on` mode. The keypad will be updated so that the keys will reflect the amount of commands configured, as well as which key has been toggled.
+
+``` python
+key = keypad.get_key(0, 0)
+
+# Toggling on the keypad and key
+keypad.toggle_on(key)
+
+# The method can take parameters to change the key when pressed
+keypad.toggle_on(key, brightness=1.0)
+keypad.toggle_on(key, colour=RGB(0, 255, 0))
+keypad.toggle_on(key, colour=RGB(128, 0, 128), brightness=0.75)
+```
+
+While the keypad is in a toggled mode, calling the following method will run a configured command.
+
+``` python
+key = keypad.get_key(0, 1)
+
+# Run the command associated with the index of the given key
+keypad.run_command(key)
+```
+
+Combining the methods and properties, the following example (from in `code.py`) can be used to listen to key presses, toggle between modes, and execute commands.
+
+``` python
+from pimoronikeypad import PimoroniKeypad, RGB
+
+keypad = PimoroniKeypad()
+
+while True:
+        
+    for key in keypad.load_pressed_keys():
+
+        # Checking for a pressed key, still_pressed property checks
+        # that the key isn't still pressed from the last iteration, 
+        # preventing multiple calls per single key press             
+        if key.is_pressed and not key.still_pressed:
+            
+            if keypad.is_toggled_on and not key.is_toggled_on:
+                keypad.run_command(key)
+            
+            elif key.is_toggled_on:
+                keypad.reset()
+                
+            elif key.is_programmed:
+                keypad.toggle_on(key, brightness=1.0)
+```
+
+Commands can be programmatically created and executed without being specifically linked to a key by the configuration set up.  The keypad methods that execute the commands can be called directly.
+
+The following takes a given string and types it as if it were typed in using the keyboard.
+
+``` python
+keypad = PimoroniKeypad()
+
+keypad.enter_text('Hello world!')
+```
+
+The following can take upto three keyboard keys, and enter them as if they were pressed at the same time on the keyboard.
+
+``` python
+# The keycode class by adafruit will need to be imported
+from adafruit_hid.keycode import Keycode
+
+keypad = PimoroniKeypad()
+
+# Press the enter key
+keypad.enter_keyboard_shortcut(Keycode.ENTER)
+
+# Press the shortcut Ctrl, S - commonly used to save a document
+keypad.enter_keyboard_shortcut(Keycode.LEFT_CONTROL, Keycode.S)
+
+# Press the shortcut Ctrl, Shift, Escape - opens Task Manager on Windows
+keypad.enter_keyboard_shortcut(Keycode.LEFT_CONTROL, Keycode.LEFT_SHIFT, Keycode.ESCAPE)
+```
 
 # Credits
 

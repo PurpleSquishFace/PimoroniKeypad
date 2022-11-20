@@ -428,9 +428,21 @@ class PimoroniKeypad:
         self._brightness = self.default_brightness
         self.is_toggled_on = False
         self.toggled_key = None
-        for key_index, key in enumerate(self.keys):
+        for key in self.keys:
             key.colour = key.master_colour
             key.brightness = self.brightness
+            key.is_toggled_on = False
+        self.update()
+
+    def clear(self):
+        """ Clears the board, including keys, to blank values """
+        self._colour = RGB(0, 0, 0)
+        self._brightness = 0.5
+        self.is_toggled_on = False
+        self.toggled_key = None
+        for key in self.keys:
+            key.colour = RGB(0, 0, 0)
+            key.brightness = 0.0
             key.is_toggled_on = False
         self.update()
 
